@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eKW-0i-rnr">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Saira-Bold.ttf">
+            <string>Saira-Bold</string>
+        </array>
+        <array key="Saira-Regular.ttf">
+            <string>Saira-Regular</string>
+        </array>
+        <array key="SairaSemiCondensed-Bold.ttf">
+            <string>SairaSemiCondensed-Bold</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Alert PopUP-->
+        <scene sceneID="eE4-Lr-V6W">
+            <objects>
+                <viewController storyboardIdentifier="ASAlertPopUP" id="eKW-0i-rnr" customClass="ASAlertPopUP" customModule="ABBC" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Tal-JZ-GHr">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cdL-ZR-t3P">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="actDismissOnTouch:" destination="eKW-0i-rnr" eventType="touchUpInside" id="UAr-w5-SbB"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LIR-80-Tht">
+                                <rect key="frame" x="32" y="376.5" width="350" height="143"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Modal Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mS9-g7-SuZ">
+                                        <rect key="frame" x="16" y="16" width="318" height="28"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" id="kvu-lu-t3X"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Saira-Bold" family="Saira" pointSize="24"/>
+                                        <color key="textColor" name="colorTextFieldActive"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Modal body text goes here." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vw5-yS-249">
+                                        <rect key="frame" x="16" y="52" width="318" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" id="9kI-b5-QJY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Saira-Regular" family="Saira" pointSize="16"/>
+                                        <color key="textColor" name="colorTextFieldActive"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m4N-GH-676">
+                                        <rect key="frame" x="16" y="79" width="318" height="0.0"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" id="f6h-Wy-owl"/>
+                                        </constraints>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="E66-KO-1X0">
+                                        <rect key="frame" x="16" y="87" width="318" height="40"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2V-k8-zao" customClass="ASButton" customModule="ABBC" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="151" height="40"/>
+                                                <color key="backgroundColor" name="colorDarkRed"/>
+                                                <fontDescription key="fontDescription" name="SairaSemiCondensed-Bold" family="Saira SemiCondensed" pointSize="16"/>
+                                                <state key="normal" title="CANCEL">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="actCancel:" destination="eKW-0i-rnr" eventType="touchUpInside" id="k2o-Vi-4lO"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HP-Bj-MIv" customClass="ASButton" customModule="ABBC" customModuleProvider="target">
+                                                <rect key="frame" x="167" y="0.0" width="151" height="40"/>
+                                                <color key="backgroundColor" red="0.0" green="0.70980392160000005" blue="0.18039215689999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" name="SairaSemiCondensed-Bold" family="Saira SemiCondensed" pointSize="16"/>
+                                                <state key="normal" title="YES">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="actYes:" destination="eKW-0i-rnr" eventType="touchUpInside" id="ryY-iB-SPr"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="ltC-rv-jWv"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="Vw5-yS-249" firstAttribute="top" secondItem="mS9-g7-SuZ" secondAttribute="bottom" constant="8" id="00d-oE-7Md"/>
+                                    <constraint firstAttribute="trailing" secondItem="m4N-GH-676" secondAttribute="trailing" constant="16" id="6E7-P4-Va6"/>
+                                    <constraint firstItem="E66-KO-1X0" firstAttribute="leading" secondItem="LIR-80-Tht" secondAttribute="leading" constant="16" id="7gm-Me-r7t"/>
+                                    <constraint firstAttribute="trailing" secondItem="Vw5-yS-249" secondAttribute="trailing" constant="16" id="GST-Hh-L0H"/>
+                                    <constraint firstAttribute="trailing" secondItem="E66-KO-1X0" secondAttribute="trailing" constant="16" id="Geg-hT-v04"/>
+                                    <constraint firstAttribute="bottom" secondItem="E66-KO-1X0" secondAttribute="bottom" constant="16" id="Ivg-K4-idh"/>
+                                    <constraint firstItem="Vw5-yS-249" firstAttribute="leading" secondItem="LIR-80-Tht" secondAttribute="leading" constant="16" id="LuJ-X1-faZ"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="PBe-3U-ZmP"/>
+                                    <constraint firstItem="E66-KO-1X0" firstAttribute="top" secondItem="m4N-GH-676" secondAttribute="bottom" constant="8" id="ZUW-3W-ig6"/>
+                                    <constraint firstItem="mS9-g7-SuZ" firstAttribute="top" secondItem="LIR-80-Tht" secondAttribute="top" constant="16" id="d9F-G9-84x"/>
+                                    <constraint firstItem="m4N-GH-676" firstAttribute="leading" secondItem="LIR-80-Tht" secondAttribute="leading" constant="16" id="fNq-db-83A"/>
+                                    <constraint firstAttribute="trailing" secondItem="mS9-g7-SuZ" secondAttribute="trailing" constant="16" id="srA-NV-orf"/>
+                                    <constraint firstItem="m4N-GH-676" firstAttribute="top" secondItem="Vw5-yS-249" secondAttribute="bottom" constant="8" id="tvG-s7-fcG"/>
+                                    <constraint firstItem="mS9-g7-SuZ" firstAttribute="leading" secondItem="LIR-80-Tht" secondAttribute="leading" constant="16" id="yXj-4b-DgD"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="TOl-Vp-xwX"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="cdL-ZR-t3P" secondAttribute="bottom" id="3gP-P3-kQn"/>
+                            <constraint firstItem="LIR-80-Tht" firstAttribute="centerY" secondItem="Tal-JZ-GHr" secondAttribute="centerY" id="7ZA-bg-8XM"/>
+                            <constraint firstAttribute="trailing" secondItem="cdL-ZR-t3P" secondAttribute="trailing" id="Beh-0x-Enf"/>
+                            <constraint firstItem="cdL-ZR-t3P" firstAttribute="top" secondItem="Tal-JZ-GHr" secondAttribute="top" id="Bkb-9j-dCk"/>
+                            <constraint firstItem="cdL-ZR-t3P" firstAttribute="leading" secondItem="Tal-JZ-GHr" secondAttribute="leading" id="Dd5-Dx-iRq"/>
+                            <constraint firstItem="TOl-Vp-xwX" firstAttribute="trailing" secondItem="LIR-80-Tht" secondAttribute="trailing" constant="32" id="WmI-tC-cKk"/>
+                            <constraint firstItem="LIR-80-Tht" firstAttribute="leading" secondItem="TOl-Vp-xwX" secondAttribute="leading" constant="32" id="XYT-8i-CFF"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnBg" destination="cdL-ZR-t3P" id="ZE1-yS-y5v"/>
+                        <outlet property="btnCancel" destination="i2V-k8-zao" id="efI-9P-8F4"/>
+                        <outlet property="btnYes" destination="9HP-Bj-MIv" id="AQy-jR-b1M"/>
+                        <outlet property="containerHeightConstraint" destination="f6h-Wy-owl" id="kxb-ha-xoH"/>
+                        <outlet property="containerView" destination="m4N-GH-676" id="M1F-PL-sJm"/>
+                        <outlet property="descriptionTopConstraint" destination="00d-oE-7Md" id="sFd-hV-WCV"/>
+                        <outlet property="footerHeightConstraints" destination="ltC-rv-jWv" id="1qw-EC-BUR"/>
+                        <outlet property="lblDescription" destination="Vw5-yS-249" id="VXb-NJ-Eee"/>
+                        <outlet property="lblTitle" destination="mS9-g7-SuZ" id="rG0-IZ-2Gg"/>
+                        <outlet property="titleTopConstraint" destination="d9F-G9-84x" id="POs-H6-C1x"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h2f-qX-18T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-204.34782608695653" y="83.705357142857139"/>
+        </scene>
+    </scenes>
+    <designables>
+        <designable name="9HP-Bj-MIv">
+            <size key="intrinsicContentSize" width="31" height="31"/>
+        </designable>
+        <designable name="i2V-k8-zao">
+            <size key="intrinsicContentSize" width="64" height="31"/>
+        </designable>
+    </designables>
+    <resources>
+        <namedColor name="colorDarkRed">
+            <color red="0.82400000095367432" green="0.086000002920627594" blue="0.19599999487400055" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="colorTextFieldActive">
+            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

@@ -1,0 +1,42 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '13.0'
+
+# ignore all warnings from all pods
+inhibit_all_warnings!
+
+def import_pods
+    #--------------------START--------------------------
+    pod 'SwiftLint'
+    
+    # keyboard handling
+    pod 'IQKeyboardManagerSwift'
+    
+    # loader
+    pod 'SVProgressHUD'
+    
+    # Internet checking
+    pod 'ReachabilitySwift'
+    
+    # lazy loading of images
+    pod 'SDWebImage'
+    
+    # Media picker
+    pod "BSImagePicker"
+    
+#    pod 'AWSS3'
+    
+    # Photo previewer
+    pod 'SKPhotoBrowser'
+    
+    # Growing textview
+    pod 'GrowingTextView'
+    
+    #------------------END----------------------------
+end
+target 'Project' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Project
+  import_pods
+end
