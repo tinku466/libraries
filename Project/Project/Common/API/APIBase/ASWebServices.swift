@@ -27,12 +27,6 @@ class ASWebServices: NSObject {
     /// Shared instance
     static let shared = ASWebServices()
     
-    /// JSONDecoder
-    let jsonDecoder: JSONDecoder = {
-        let jsonDecoder = JSONDecoder()
-        return jsonDecoder
-    }()
-    
     /// Default status Code
     let defaultStatusCode: Int = 201
     ///
@@ -44,7 +38,7 @@ class ASWebServices: NSObject {
     /// - Parameters:
     ///   - request: URLRequest
     ///   - completion: Result<T, Error> => This will return the response of the request along with status code of the request and error string of response.
-    func requestHandling<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, Error>, _ statusCode: Int) -> Void) {
+    func requestHandling(request: URLRequest, completion: @escaping (Result<Data, Error>, _ statusCode: Int) -> Void) {
         
         URLSession.shared.request(with: request) { (result) in
             switch result {
@@ -64,23 +58,13 @@ class ASWebServices: NSObject {
                     print("statusCode should be 200, but is \(statusCode)")
                 }
                 
-                do {
-                    let reply = String(data: data, encoding: .utf8)
-                    print(reply ?? "")
-                    
-                    let values = try self.jsonDecoder.decode(T.self, from: data)
-                    completion(.success(values), statusCode)
-                    return
-                } catch {
-                    let reply = String(data: data, encoding: .utf8)
-                    print(reply ?? "")
-                    
-                    let error = NSError(domain: "decoding issue", code: 0, userInfo: [NSLocalizedDescriptionKey: reply ?? "Response is not in correct format"])
-                    completion(.failure(error), statusCode)
-                    return
-                }
+                //                let reply = String(data: data, encoding: .utf8)
+                //                print(reply ?? "")
+                
+                completion(.success(data), statusCode)
+                return
             }
-            }.resume()
+        }.resume()
     }
     
     //MARK:- POST REQUEST
@@ -94,12 +78,12 @@ class ASWebServices: NSObject {
     ///   - contentType: Content Type for the request.
     ///   - extraHeader: send header fields
     ///   - completion: Result<T, Error>
-    func requestPostDataApi<T: Decodable>(url: String,
-                                          parameters: Dictionary<String, Any>,
-                                          method: String = HttpMethods.post,
-                                          contentType: String = ContentType.applicationJson,
-                                          extraHeader: Dictionary<String, String> = [:],
-                                          completion: @escaping (Result<T, Error>, _ statusCode: Int) -> Void) {
+    func requestPostDataApi(url: String,
+                            parameters: Dictionary<String, Any>,
+                            method: String = HttpMethods.post,
+                            contentType: String = ContentType.applicationJson,
+                            extraHeader: Dictionary<String, String> = [:],
+                            completion: @escaping (Result<Data, Error>, _ statusCode: Int) -> Void) {
         
         guard let requestUrl = URL.init(string: url) else {
             let error = NSError(domain: ErrorType.invalidUrl, code: 0, userInfo: [NSLocalizedDescriptionKey: "URL not valid"])
@@ -154,12 +138,12 @@ class ASWebServices: NSObject {
     ///   - extraHeader: send header fields
     ///   - modifyUrl: If false then it will pass the url as it is instead of picking it from componets
     /// - Returns: This will return the response of the request along with status code of the request.
-    func requestGETDataApi<T: Decodable>(url: String,
-                                         parameters: Dictionary<String, Any>,
-                                         method: String = HttpMethods.get,
-                                         extraHeader: Dictionary<String, String> = [:],
-                                         modifyUrl: Bool = true,
-                                         completion: @escaping (Result<T, Error>, _ statusCode: Int) -> Void) {
+    func requestGETDataApi(url: String,
+                           parameters: Dictionary<String, Any>,
+                           method: String = HttpMethods.get,
+                           extraHeader: Dictionary<String, String> = [:],
+                           modifyUrl: Bool = true,
+                           completion: @escaping (Result<Data, Error>, _ statusCode: Int) -> Void) {
         
         var components = URLComponents.init(string: url)
         let originalUrl = URL.init(string: url)
@@ -205,11 +189,11 @@ class ASWebServices: NSObject {
     ///   - method: HTTP Method, default is POST.
     ///   - extraHeader: send header fields
     /// - Returns: This will return the response of the request along with status code of the request.
-    func requestMultiPartApi<T: Decodable>(url: String,
-                                           parameters: Dictionary<String, Any>,
-                                           mediaFiles: [MediaFiles],
-                                           method: String = HttpMethods.post, extraHeader: Dictionary<String, String> = [:],
-                                           completion: @escaping (Result<T, Error>, _ statusCode: Int) -> Void) {
+    func requestMultiPartApi(url: String,
+                             parameters: Dictionary<String, Any>,
+                             mediaFiles: [MediaFiles],
+                             method: String = HttpMethods.post, extraHeader: Dictionary<String, String> = [:],
+                             completion: @escaping (Result<Data, Error>, _ statusCode: Int) -> Void) {
         
         let boundaryConstant  = "----WebKitFormBoundary7MA4YWxkTrZu0gW"
         let contentType = "multipart/form-data; boundary=\(boundaryConstant)"
@@ -240,13 +224,13 @@ class ASWebServices: NSObject {
             print("\(key) : \(value)")
             
             guard let data1 = "--\(boundaryConstant)\r\n".data(using: .utf8),
-                let data2 = "Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8),
-                let data3 = "\(value)\r\n".data(using: .utf8),
-                let data4 = "\r\n".data(using: .utf8) else {
-                    
-                    let error = NSError(domain: ErrorType.invalidParameters, code: 0, userInfo: [NSLocalizedDescriptionKey: "Parameter's data is nil."])
+                  let data2 = "Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8),
+                  let data3 = "\(value)\r\n".data(using: .utf8),
+                  let data4 = "\r\n".data(using: .utf8) else {
+                
+                let error = NSError(domain: ErrorType.invalidParameters, code: 0, userInfo: [NSLocalizedDescriptionKey: "Parameter's data is nil."])
                 completion(.failure(error), ASWebServices.shared.defaultStatusCode)
-                    return
+                return
             }
             body.append(data1)
             body.append(data2)
@@ -264,14 +248,14 @@ class ASWebServices: NSObject {
             print("\(keyName) : \(fileName)")
             
             guard let data1 = "--\(boundaryConstant)\r\n".data(using: .utf8),
-                let data2 = "Content-Disposition: form-data; name=\"\(keyName)\"; filename=\"\(fileName)\"\r\n".data(using: .utf8),
-                let data3 = "Content-Type: \(mediaContentType)\r\n\r\n".data(using: .utf8),
-                let imageData = file.fileImage?.jpegData(compressionQuality: 0.6),
-                let data4 = "\r\n".data(using: .utf8) else {
-                    
-                    let error = NSError(domain: ErrorType.invalidParameters, code: 0, userInfo: [NSLocalizedDescriptionKey: "Media Files Parameter's data is nil."])
+                  let data2 = "Content-Disposition: form-data; name=\"\(keyName)\"; filename=\"\(fileName)\"\r\n".data(using: .utf8),
+                  let data3 = "Content-Type: \(mediaContentType)\r\n\r\n".data(using: .utf8),
+                  let imageData = file.fileImage?.jpegData(compressionQuality: 0.6),
+                  let data4 = "\r\n".data(using: .utf8) else {
+                
+                let error = NSError(domain: ErrorType.invalidParameters, code: 0, userInfo: [NSLocalizedDescriptionKey: "Media Files Parameter's data is nil."])
                 completion(.failure(error), ASWebServices.shared.defaultStatusCode)
-                    return
+                return
             }
             body.append(data1)
             body.append(data2)
@@ -333,7 +317,7 @@ struct MediaFiles {
     
     /// File url
     var fileUrl: String
-
+    
     /// Init Modal.
     /// - Parameter keyName: String
     /// - Parameter fileName: String

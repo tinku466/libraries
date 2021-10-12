@@ -16,6 +16,12 @@ class ASDataModal: NSObject {
     /// Utilities Shared Instance
     private let objUtil = ASUtility.shared
     
+    /// JSONDecoder
+    let jsonDecoder: JSONDecoder = {
+        let jsonDecoder = JSONDecoder()
+        return jsonDecoder
+    }()
+    
     //MARK:- POST REQUEST
     
     /// This function is used to hit api to server with parameters.
@@ -38,10 +44,14 @@ class ASDataModal: NSObject {
         
         print(parameters)
         weak var weakSelf = self
-        ASWebServices.shared.requestPostDataApi(url: url, parameters: parameters, method: method, contentType: contentType, extraHeader: extraHeader) { (result: Result<Success<T>, Error>, _ statusCode: Int) in
-            
-            let response = weakSelf?.responseOutput(result: result, showErrorToast: showErrorToast, statusCode)
-            completion(response?.0, response?.1)
+        ASWebServices.shared.requestPostDataApi(url: url, parameters: parameters, method: method, contentType: contentType, extraHeader: extraHeader) { (result: Result<Data, Error>, _ statusCode: Int) in
+            ///
+            /// Convert into codable format
+            weakSelf?.codableFormatter(response: result, completion: { (result1: Result<Success<T>, Error>) in
+                
+                let response = weakSelf?.responseOutput(result: result1, showErrorToast: showErrorToast, statusCode)
+                completion(response?.0, response?.1)
+            })
         }
     }
     
@@ -68,12 +78,15 @@ class ASDataModal: NSObject {
         
         print(parameters)
         weak var weakSelf = self
-        ASWebServices.shared.requestMultiPartApi(url: url, parameters: parameters, mediaFiles: mediaFiles, extraHeader: extraHeader) { (result: Result<Success<T>, Error>, _ statusCode: Int) in
-            
-            let response = weakSelf?.responseOutput(result: result, showErrorToast: showErrorToast, statusCode)
-            completion(response?.0, response?.1)
+        ASWebServices.shared.requestMultiPartApi(url: url, parameters: parameters, mediaFiles: mediaFiles, extraHeader: extraHeader) { (result: Result<Data, Error>, _ statusCode: Int) in
+            ///
+            /// Convert into codable format
+            weakSelf?.codableFormatter(response: result, completion: { (result1: Result<Success<T>, Error>) in
+              
+                let response = weakSelf?.responseOutput(result: result1, showErrorToast: showErrorToast, statusCode)
+                completion(response?.0, response?.1)
+            })
         }
-        
     }
     
     //MARK:- GET REQUEST
@@ -96,42 +109,47 @@ class ASDataModal: NSObject {
                                        completion: @escaping (T?, ResponseTuples?) -> Void) {
         
         weak var weakSelf = self
-        
-        ASWebServices.shared.requestGETDataApi(url: url, parameters: parameters, method: method, extraHeader: extraHeader, modifyUrl: modifyUrl) { (result: Result<Success<T>, Error>, _ statusCode: Int) in
-            
-            let response = weakSelf?.responseOutput(result: result, showErrorToast: showErrorToast, statusCode)
-            completion(response?.0, response?.1)
-        }
-    }
-    
-    //MARK:- GET REQUEST WITH RAW RESPONSE
-    
-    /// This function is used to hit api to server with parameters to get raw response.
-    ///
-    /// - Parameters:
-    ///   - url: Url string of the request.
-    ///   - parameters: Parameters which is required to use the API.
-    ///   - method: Http method for the APi.
-    ///   - extraHeader: Header fields for request
-    ///   - showErrorToast: Weather to show error alert or not.
-    ///   - completion: validatedData => The response of the APi, isSuccess => true or false based on status code, msg: String of the message received with response.
-    func requestGetRAWDataApi<T: Codable>(with url: String,
-                                          parameters: Dictionary<String, Any>,
-                                          method: String = HttpMethods.get,
-                                          extraHeader: Dictionary<String, String> = [:],
-                                          showErrorToast: Bool = true,
-                                          modifyUrl: Bool = true,
-                                          completion: @escaping (_ result: Result<Success<T>, Error>) -> Void) {
-        
-        ASWebServices.shared.requestGETDataApi(url: url, parameters: parameters, method: method, extraHeader: extraHeader, modifyUrl: modifyUrl) { (result: Result<Success<T>, Error>, _ statusCode: Int) in
-            
-            completion(result)
+        ASWebServices.shared.requestGETDataApi(url: url, parameters: parameters, method: method, extraHeader: extraHeader, modifyUrl: modifyUrl) { (result: Result<Data, Error>, _ statusCode: Int) in
+            ///
+            /// Convert into codable format
+            weakSelf?.codableFormatter(response: result, completion: { (result1: Result<Success<T>, Error>) in
+              
+                let response = weakSelf?.responseOutput(result: result1, showErrorToast: showErrorToast, statusCode)
+                completion(response?.0, response?.1)
+            })
         }
     }
 }
 
 //MARK:- RESPONSE VALIDATIONS
 extension ASDataModal {
+    /// Convert APi response into codable format
+    /// - Parameters:
+    ///   - response: Result<Data, Error>
+    ///   - completion: Result<T, Error>
+    func codableFormatter<T: Codable>(response: Result<Data, Error>, completion: @escaping (Result<T, Error>) -> Void) {
+        switch response {
+        case .failure(let error):
+            completion(.failure(error))
+            return
+        case .success(let data):
+            do {
+                let reply = String(data: data, encoding: .utf8)
+                print(reply ?? "")
+                
+                let values = try self.jsonDecoder.decode(T.self, from: data)
+                completion(.success(values))
+                return
+            } catch {
+                let reply = String(data: data, encoding: .utf8)
+                print(reply ?? "")
+                
+                let error = NSError(domain: "decoding issue", code: 0, userInfo: [NSLocalizedDescriptionKey: reply ?? "Response is not in correct format"])
+                completion(.failure(error))
+                return
+            }
+        }
+    }
     
     /// This function will validate and returns the validated response of request.
     /// - Parameter result: Result<Success<T>, Error>
